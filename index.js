@@ -65,8 +65,7 @@ app.post('/login', async (req, res) => {
 // =============================================================================
 app.post('/stages', async (req, res) => {
     try {
-        const { title, subject, totalStudentsOfStage, totalGroupsOfStage } = req.body;
-        const teacherId = req.user.id; // Assuming the teacher's ID is stored in the req.user object
+        const { title, teacherId, subject, totalStudentsOfStage, totalGroupsOfStage } = req.body;
         const stage = new Stage({ title, subject, teacherId, totalStudentsOfStage, totalGroupsOfStage });
         stage.id = await getNextStageId(); // Get the next ID for the stage
         await stage.save();
