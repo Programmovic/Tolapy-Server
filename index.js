@@ -25,8 +25,12 @@ app.use(cors());
 // =============================================================================
 // //REGISTER TEACHER API
 // =============================================================================
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
     const teacher = new Teacher(req.body);
+    const existing_teacher = await Teacher.findOne({ username: teacher.username });
+    if (existing_teacher) {
+        return res.status(409).send('Teacher already exists');
+    }
     teacher.save()
         .then((savedTeacher) => res.json(savedTeacher))
         .catch((err) => {
