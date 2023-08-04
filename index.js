@@ -110,8 +110,8 @@ app.get('/stages/:id', async (req, res) => {
 // =============================================================================
 app.put('/stages/:id', async (req, res) => {
     try {
-        const { title, teacherId, subject, totalStudentsOfStage, totalGroupsOfStage } = req.body;
-        const stage = await Stage.findOneAndUpdate({ _id: req.params.id }, { title, subject, teacherId, totalStudentsOfStage, totalGroupsOfStage }, { new: true });
+        const { title, teacherId, subject, groupRank, totalStudentsOfStage, totalGroupsOfStage } = req.body;
+        const stage = await Stage.findOneAndUpdate({ _id: req.params.id }, { title, subject, teacherId, groupRank, totalStudentsOfStage, totalGroupsOfStage }, { new: true });
         if (!stage) {
             return res.status(404).json({ message: 'Stage not found' });
         }
