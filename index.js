@@ -127,7 +127,7 @@ app.put('/stages/:id', async (req, res) => {
 // =============================================================================
 app.delete('/stages/:id', async (req, res) => {
     try {
-        const stage = await Stage.findOneAndDelete({ id: req.params.id });
+        const stage = await Stage.findOneAndDelete({ _id: req.params.id });
         if (!stage) {
             return res.status(404).json({ message: 'Stage not found' });
         }
