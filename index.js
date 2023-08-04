@@ -94,7 +94,7 @@ app.get('/stages', async (req, res) => {
 // =============================================================================
 app.get('/stages/:id', async (req, res) => {
     try {
-        const stage = await Stage.findOne({ id: req.params.id });
+        const stage = await Stage.findOne({ _id: req.params.id });
         if (!stage) {
             return res.status(404).json({ message: 'Stage not found' });
         }
