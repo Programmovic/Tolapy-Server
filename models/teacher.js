@@ -13,6 +13,7 @@ const teacherSchema = new mongoose.Schema({
   address: { type: String, default: '' },
   subject: { type: String },
   description: { type: String },
+  created_at: { type: Date, default: Date.now }
 }, { collection: 'Teachers' });
 
 // Hash the password before saving to the database
