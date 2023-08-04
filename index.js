@@ -110,8 +110,7 @@ app.get('/stages/:id', async (req, res) => {
 // =============================================================================
 app.put('/stages/:id', async (req, res) => {
     try {
-        const { title, subject, totalStudentsOfStage, totalGroupsOfStage } = req.body;
-        const teacherId = req.user.id; // Assuming the teacher's ID is stored in the req.user object
+        const { title, teacherId, subject, totalStudentsOfStage, totalGroupsOfStage } = req.body;
         const stage = await Stage.findOneAndUpdate({ id: req.params.id, teacherId }, { title, subject, totalStudentsOfStage, totalGroupsOfStage }, { new: true });
         if (!stage) {
             return res.status(404).json({ message: 'Stage not found' });
@@ -128,8 +127,7 @@ app.put('/stages/:id', async (req, res) => {
 // =============================================================================
 app.delete('/stages/:id', async (req, res) => {
     try {
-        const teacherId = req.user.id; // Assuming the teacher's ID is stored in the req.user object
-        const stage = await Stage.findOneAndDelete({ id: req.params.id, teacherId });
+        const stage = await Stage.findOneAndDelete({ id: req.params.id });
         if (!stage) {
             return res.status(404).json({ message: 'Stage not found' });
         }
