@@ -29,9 +29,14 @@ app.post('/register', (req, res) => {
     const teacher = new Teacher(req.body);
     teacher.save()
         .then((savedTeacher) => res.json(savedTeacher))
-        .catch((err) => res.status(500).json({ error: err }));
+        .catch((err) => {
+            if (err.code === 11000) {
+                res.status(400).json({ error: 'Duplicate key error' });
+            } else {
+                res.status(500).json({ error: err });
+            }
+        });
 });
-
 // =============================================================================
 // //LOGIN TEACHER API
 // =============================================================================

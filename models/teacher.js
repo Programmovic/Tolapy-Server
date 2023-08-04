@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const teacherSchema = new mongoose.Schema({
-  id: { type: String },
-  username: { type: String, required: true },
+  id: { type: String, },
+  username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   firstName: { type: String },
   lastName: { type: String },
@@ -16,7 +16,7 @@ const teacherSchema = new mongoose.Schema({
 }, { collection: 'Teachers' });
 
 // Hash the password before saving to the database
-teacherSchema.pre('save', function(next) {
+teacherSchema.pre('save', function (next) {
   const teacher = this;
   if (!teacher.isModified('password')) {
     return next();
@@ -36,7 +36,7 @@ teacherSchema.pre('save', function(next) {
 });
 
 // Compare the password entered by the user with the hashed password in the database
-teacherSchema.methods.comparePassword = function(candidatePassword, callback) {
+teacherSchema.methods.comparePassword = function (candidatePassword, callback) {
   bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
     if (err) {
       return callback(err);
