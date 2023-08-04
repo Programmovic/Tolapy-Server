@@ -65,8 +65,8 @@ app.post('/login', async (req, res) => {
 // =============================================================================
 app.post('/stages', async (req, res) => {
     try {
-        const { title, teacherId, subject, totalStudentsOfStage, totalGroupsOfStage } = req.body;
-        const stage = new Stage({ title, subject, teacherId, totalStudentsOfStage, totalGroupsOfStage });
+        const stage_data = req.body;
+        const stage = new Stage(stage_data);
         stage.id = await getNextStageId(); // Get the next ID for the stage
         await stage.save();
         res.status(201).json(stage);
@@ -110,8 +110,8 @@ app.get('/stages/:id', async (req, res) => {
 // =============================================================================
 app.put('/stages/:id', async (req, res) => {
     try {
-        const { title, teacherId, subject, groupRank, totalStudentsOfStage, totalGroupsOfStage } = req.body;
-        const stage = await Stage.findOneAndUpdate({ _id: req.params.id }, { title, subject, teacherId, groupRank, totalStudentsOfStage, totalGroupsOfStage }, { new: true });
+        const new_data = req.body;
+        const stage = await Stage.findOneAndUpdate({ _id: req.params.id }, new_data, { new: true });
         if (!stage) {
             return res.status(404).json({ message: 'Stage not found' });
         }
