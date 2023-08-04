@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const cors = require('cors');
 const mongoose = require('mongoose');
 const Teacher = require('./models/teacher');
 const Student = require('./models/student');
@@ -19,6 +20,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 // =============================================================================
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
 // =============================================================================
 // //REGISTER TEACHER API
 // =============================================================================
