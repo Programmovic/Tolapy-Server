@@ -29,16 +29,12 @@ app.post('/register', async (req, res) => {
     const teacher = new Teacher(req.body);
     const existing_teacher = await Teacher.findOne({ username: teacher.username });
     if (existing_teacher) {
-        return res.status(409).send('Teacher already exists');
+        return res.status(409).json({ error: 'Teacher already exists' });
     }
     teacher.save()
         .then((savedTeacher) => res.json(savedTeacher))
         .catch((err) => {
-            if (err.code === 11000) {
-                res.status(400).json({ error: 'Duplicate key error' });
-            } else {
-                res.status(500).json({ error: err });
-            }
+            res.status(500).json({ error: err });
         });
 });
 // =============================================================================
