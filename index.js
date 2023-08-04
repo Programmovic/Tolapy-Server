@@ -32,30 +32,31 @@ app.post('/register', (req, res) => {
 // =============================================================================
 // //LOGIN TEACHER API
 // =============================================================================
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-  
+
     try {
-      const teacher = await Teacher.findOne({ username });
-  
-      if (!teacher) {
-        return res.status(401).json({ error: 'Teacher not found' });
-      }
-  
-      const isMatch = await bcrypt.compare(password, teacher.password);
-  
-      if (!isMatch) {
-        return res.status(401).json({ error: 'Incorrect password' });
-      }
-  
-      const token = jwt.sign({ teacherId: teacher.id }, 'secret_key');
-  
-      res.json({ token });
+        const teacher = await Teacher.findOne({ username });
+
+        if (!teacher) {
+            return res.status(401).json({ error: 'Teacher not found' });
+        }
+
+        const isMatch = await bcrypt.compare(password, teacher.password);
+
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Incorrect password' });
+        }
+        const token = jwt.sign({ teacherId: teacher.id }, 'secret_key');
+
+        res.json({ teacher, token });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: err });
+        console.error(err);
+        res.status(500).json({ error: err });
     }
-  });
+});
 //CREATE STUDENT API
 app.get('/students', (req, res) => {
     Student.find()
@@ -190,6 +191,6 @@ app.listen(3001, () => {
 });
 // respond with "hello world" when a GET request is made to the homepage
 app.get('/', (req, res) => {
-  res.send('hello world')
+    res.send('hello world')
 })
 module.exports = app;
