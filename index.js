@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
+const Stage = require('./models/stage');
 const Teacher = require('./models/teacher');
 const Student = require('./models/student');
 const Group = require('./models/group');
@@ -59,6 +60,109 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ error: err });
     }
 });
+// =============================================================================
+// // Create a new stage
+// =============================================================================
+app.post('/stages', async (req, res) => {
+    try {
+        const { title, subject, totalStudentsOfStage, totalGroupsOfStage } = req.body;
+        const teacherId = req.user.id; // Assuming the teacher's ID is stored in the req.user object
+        const stage = new Stage({ title, subject, teacherId, totalStudentsOfStage, totalGroupsOfStage });
+        stage.id = await getNextStageId(); // Get the next ID for the stage
+        await stage.save();
+        res.status(201).json(stage);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// =============================================================================
+// // Get all stages
+// =============================================================================
+app.get('/stages', async (req, res) => {
+    try {
+        const stages = await Stage.find();
+        res.json(stages);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// =============================================================================
+// // Get a single stage by ID
+// =============================================================================
+app.get('/stages/:id', async (req, res) => {
+    try {
+        const stage = await Stage.findOne({ id: req.params.id });
+        if (!stage) {
+            return res.status(404).json({ message: 'Stage not found' });
+        }
+        res.json(stage);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// =============================================================================
+// // Update a stage by ID
+// =============================================================================
+app.put('/stages/:id', async (req, res) => {
+    try {
+        const { title, subject, totalStudentsOfStage, totalGroupsOfStage } = req.body;
+        const teacherId = req.user.id; // Assuming the teacher's ID is stored in the req.user object
+        const stage = await Stage.findOneAndUpdate({ id: req.params.id, teacherId }, { title, subject, totalStudentsOfStage, totalGroupsOfStage }, { new: true });
+        if (!stage) {
+            return res.status(404).json({ message: 'Stage not found' });
+        }
+        res.json(stage);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// =============================================================================
+// // Delete a stage by ID
+// =============================================================================
+app.delete('/stages/:id', async (req, res) => {
+    try {
+        const teacherId = req.user.id; // Assuming the teacher's ID is stored in the req.user object
+        const stage = await Stage.findOneAndDelete({ id: req.params.id, teacherId });
+        if (!stage) {
+            return res.status(404).json({ message: 'Stage not found' });
+        }
+        res.json({ message: 'Stage deleted' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+// =============================================================================
+// // Get all stages of a specific teacher
+// =============================================================================
+app.get('/teachers/:teacherId/stages', async (req, res) => {
+    try {
+        const teacherId = req.params.teacherId; // Get the teacher ID from the URL parameter
+        const stages = await Stage.find({ teacherId }); // Find all stages with the specified teacher ID
+        res.json(stages);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+// =============================================================================
+// // Helper function to get the next ID for a stage
+// =============================================================================
+async function getNextStageId() {
+    const lastStage = await Stage.findOne().sort({ id: -1 });
+    if (!lastStage) {
+        return 1;
+    }
+    return lastStage.id + 1;
+}
 //CREATE STUDENT API
 app.get('/students', (req, res) => {
     Student.find()
