@@ -11,7 +11,7 @@ const Degree = require('./models/degree');
 const Attendance = require('./models/attendance');
 const GroupAttendance = require('./models/groupAttendance');
 // =============================================================================
-// CONNECT TO MONGO DB
+// CONNECT TO MONGO DATABASE
 // =============================================================================
 const uri = 'mongodb+srv://adam:EPQfpcJi2hwnsCoW@cluster0.ujd6hhy.mongodb.net/Tolapy';
 
@@ -193,30 +193,105 @@ app.delete('/students/:id', (req, res) => {
         .catch((err) => res.status(500).json({ error: err }));
 });
 
-//CREATE GROUP API
-app.get('/groups', (req, res) => {
-    Group.find()
-        .then((groups) => res.json(groups))
-        .catch((err) => res.status(500).json({ error: err }));
-});
+// =============================================================================
+// // CREATE GROUP API
+// =============================================================================
+app.post('/groups', async (req, res) => {
+    try {
+        const stageId = req.body.stageId;
+        const stage = await Stage.findById(stageId);
 
-app.post('/groups', (req, res) => {
-    const group = new Group(req.body);
-    group.save()
-        .then((savedGroup) => res.json(savedGroup))
-        .catch((err) => res.status(500).json({ error: err }));
-});
+        if (!stage) {
+            return res.status(404).json({ message: 'Stage not found' });
+        }
 
-app.put('/groups/:id', (req, res) => {
-    Group.findByIdAndUpdate(req.params.id, req.body)
-        .then(() => res.json({ message: 'Group updated successfully' }))
-        .catch((err) => res.status(500).json({ error: err }));
-});
+        const newGroup = new Group(req.body);
+        await newGroup.save();
 
-app.delete('/groups/:id', (req, res) => {
-    Group.findByIdAndDelete(req.params.id)
-        .then(() => res.json({ message: 'Group deleted successfully' }))
-        .catch((err) => res.status(500).json({ error: err }));
+        stage.totalGroupsOfStageNumber++;
+        stage.totalGroupsOfStage.push(newGroup);
+        await stage.save();
+
+        res.status(201).json(newGroup);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to create group', error });
+    }
+});
+// =============================================================================
+// // GET ALL GROUPS
+// =============================================================================
+app.get('/groups', async (req, res) => {
+    try {
+        const groups = await Group.find();
+        res.json(groups);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve groups', error });
+    }
+});
+// =============================================================================
+// // GET SPECIFIC GROUP
+// =============================================================================
+app.get('/groups/:id', async (req, res) => {
+    try {
+        const group = await Group.findById(req.params.id);
+
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+
+        res.json(group);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve group', error });
+    }
+});
+// =============================================================================
+// // UPDATE SPECIFIC GROUP 
+// =============================================================================
+app.put('/groups/:id', async (req, res) => {
+    try {
+        const group = await Group.findById(req.params.id);
+
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+
+        Object.assign(group, req.body);
+        await group.save();
+
+        res.json(group);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update group', error });
+    }
+});
+// =============================================================================
+// // DELETE SPECIFIC GROUP
+// =============================================================================
+app.delete('/groups/:id', async (req, res) => {
+    try {
+        const group = await Group.findById(req.params.id);
+
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+
+        const stage = await Stage.findById(group.stageIdOfGroup);
+
+        if (!stage) {
+            return res.status(404).json({ message: 'Stage not found' });
+        }
+
+        stage.totalGroupsOfStageNumber--;
+        stage.totalGroupsOfStage = stage.totalGroupsOfStage.filter(
+            (groupId) => groupId !== group._id
+        );
+        await stage.save();
+
+        await group.remove();
+
+        res.json({ message: 'Group deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to delete group', error });
+    }
 });
 
 //CREATE DEGREE API
