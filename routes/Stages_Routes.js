@@ -1,6 +1,7 @@
 const express = require('express');
 const Stage = require('../models/stage');
 const Group = require('../models/group');
+const getNextStageId = require('../utils/getNextStageId');
 const stageRouter = express.Router();
 // =============================================================================
 // Reset IDs of stages to sequential values
@@ -124,15 +125,6 @@ stageRouter.get('/:stageId/groups', async (req, res) => {
         res.status(500).json({ message: 'Failed to retrieve groups', error });
     }
 });
-// =============================================================================
-// // Helper function to get the next ID for a stage
-// =============================================================================
-async function getNextStageId() {
-    const lastStage = await Stage.findOne().sort({ id: -1 });
-    if (!lastStage) {
-        return 1;
-    }
-    return lastStage.id + 1;
-}
+
 
 module.exports = stageRouter;
