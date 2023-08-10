@@ -295,7 +295,7 @@ app.put('/groups/:id', async (req, res) => {
 // =============================================================================
 app.delete('/groups/:id', async (req, res) => {
     try {
-        const group = await Group.findById(req.params.id);
+        const group = await Group.findByIdAndDelete(req.params.id);
 
         if (!group) {
             return res.status(404).json({ message: 'Group not found' });
