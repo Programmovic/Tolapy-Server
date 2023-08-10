@@ -51,7 +51,7 @@ teacherRouter.post('/login', async (req, res) => {
 teacherRouter.get('/:teacherId/stages', async (req, res) => {
     try {
         const teacherId = req.params.teacherId; // Get the teacher ID from the URL parameter
-        const stages = await Stage.find({ teacherId }); // Find all stages with the specified teacher ID
+        const stages = await Stage.find({ teacherId: teacherId }); // Find all stages with the specified teacher ID
         res.json(stages);
     } catch (err) {
         console.error(err);
