@@ -199,7 +199,7 @@ app.delete('/students/:id', (req, res) => {
 app.post('/groups', async (req, res) => {
     try {
         const stageId = req.body.stageId;
-        const stage = await Stage.findById(_id);
+        const stage = await Stage.findById(stageId);
 
         if (!stage) {
             return res.status(404).json({ message: 'Stage not found' });
