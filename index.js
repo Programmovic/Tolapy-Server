@@ -313,8 +313,6 @@ app.delete('/groups/:id', async (req, res) => {
         );
         await stage.save();
 
-        await group.remove();
-
         res.json({ message: 'Group deleted successfully' });
     } catch (error) {
         res.status(500).json(error.message);
