@@ -306,7 +306,7 @@ app.get('/stages/:stageId/groups', async (req, res) => {
         }
 
         const groups = await Group.find({ stageIdOfGroup: stageId });
-        res.json(groups);
+        res.json(groups.groupMaxQuizzes);
     } catch (error) {
         res.status(500).json({ message: 'Failed to retrieve groups', error });
     }
