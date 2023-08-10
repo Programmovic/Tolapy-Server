@@ -122,18 +122,7 @@ app.get('/stages', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-// =============================================================================
-// // Get Length
-// =============================================================================
-app.get('/stages/length', async (req, res) => {
-    try {
-        const stages = await Stage.find();
-        res.json(stages.length);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
+
 // =============================================================================
 // // Get a single stage by ID
 // =============================================================================
