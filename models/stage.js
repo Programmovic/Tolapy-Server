@@ -3,7 +3,7 @@ const Student = require('./student');
 const Group = require('./group');
 
 const stageSchema = new mongoose.Schema({
-  id: { type: String },
+  id: { type: Number },
   title: { type: String },
   subject: { type: String },
   teacherId: { type: String },

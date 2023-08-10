@@ -162,12 +162,10 @@ app.get('/teachers/:teacherId/stages', async (req, res) => {
 // =============================================================================
 async function getNextStageId() {
     const lastStage = await Stage.findOne().sort({ id: -1 });
-
     if (!lastStage) {
         return 1;
     }
-
-    return parseInt(lastStage.id) + 1;
+    return lastStage.id + 1;
 }
 //CREATE STUDENT API
 app.get('/students', (req, res) => {
