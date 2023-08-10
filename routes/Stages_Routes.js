@@ -117,4 +117,4 @@ async function getNextStageId() {
     return lastStage.id + 1;
 }
 
-export default stageRouter;
+module.exports = stageRouter;

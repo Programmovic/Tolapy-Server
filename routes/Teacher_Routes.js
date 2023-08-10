@@ -59,4 +59,4 @@ teacherRouter.get('/:teacherId/stages', async (req, res) => {
     }
 });
 
-export default teacherRouter;
+module.exports = teacherRouter;
