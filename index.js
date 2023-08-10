@@ -10,9 +10,7 @@ const Group = require('./models/group');
 const Degree = require('./models/degree');
 const Attendance = require('./models/attendance');
 const GroupAttendance = require('./models/groupAttendance');
-// =============================================================================
-// CONNECT TO MONGO DB
-// =============================================================================
+
 const uri = 'mongodb+srv://adam:EPQfpcJi2hwnsCoW@cluster0.ujd6hhy.mongodb.net/Tolapy';
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
