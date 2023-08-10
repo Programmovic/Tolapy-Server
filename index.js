@@ -68,6 +68,33 @@ app.post('/login', async (req, res) => {
     }
 });
 // =============================================================================
+// Reset IDs of stages to sequential values
+// =============================================================================
+app.post('/stages/reset-ids', async (req, res) => {
+    try {
+        const stages = await Stage.find().sort({ id: 1 }); // Retrieve all stages sorted by ID in ascending order
+        let nextId = 1;
+
+        // Convert existing IDs to integer and set them to 0
+        for (const stage of stages) {
+            stage.id = 0;
+            await stage.save();
+        }
+
+        // Update the ID of each stage sequentially
+        for (const stage of stages) {
+            stage.id = nextId;
+            await stage.save();
+            nextId++;
+        }
+
+        res.json({ message: 'Stage IDs reset successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+// =============================================================================
 // // Create a new stage
 // =============================================================================
 app.post('/stages', async (req, res) => {
