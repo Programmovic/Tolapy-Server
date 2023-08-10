@@ -198,7 +198,7 @@ app.delete('/students/:id', (req, res) => {
 // =============================================================================
 app.post('/groups', async (req, res) => {
     try {
-        const stageId = req.body.stageId;
+        const stageId = req.body.stageIdOfGroup;
         const stage = await Stage.findById(stageId);
 
         if (!stage) {
