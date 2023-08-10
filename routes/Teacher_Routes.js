@@ -55,7 +55,7 @@ teacherRouter.get('/:teacherId/stages', async (req, res) => {
         res.json(stages);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json(err);
     }
 });
 
