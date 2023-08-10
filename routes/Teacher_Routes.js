@@ -1,4 +1,4 @@
-import express from 'express';
+const express = require('express');
 const Teacher = require('./models/teacher');
 const Stage = require('./models/stage');
 const teacherRouter = express.Router();

@@ -24,7 +24,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-
+// Routes
 app.use("/teacher", teacherRouter);
 app.use("/stages", stageRouter);
 
