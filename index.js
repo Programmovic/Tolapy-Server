@@ -293,7 +293,24 @@ app.delete('/groups/:id', async (req, res) => {
         res.status(500).json({ message: 'Failed to delete group', error });
     }
 });
+// =============================================================================
+// // get the groups of a specific stage
+// =============================================================================
+app.get('/stages/:stageId/groups', async (req, res) => {
+    try {
+        const stageId = req.params.stageId;
+        const stage = await Stage.findById(stageId);
 
+        if (!stage) {
+            return res.status(404).json({ message: 'Stage not found' });
+        }
+
+        const groups = await Group.find({ stageIdOfGroup: stageId });
+        res.json(groups);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve groups', error });
+    }
+});
 //CREATE DEGREE API
 app.get('/degrees', (req, res) => {
     Degree.find()
