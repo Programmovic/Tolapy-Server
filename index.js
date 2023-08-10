@@ -125,7 +125,7 @@ app.get('/stages', async (req, res) => {
 // =============================================================================
 // // Get Length
 // =============================================================================
-app.get('/stages', async (req, res) => {
+app.get('/stages/length', async (req, res) => {
     try {
         const stages = await Stage.find();
         res.json(stages.length);
