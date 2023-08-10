@@ -1,5 +1,6 @@
 const express = require('express');
 const Stage = require('../models/stage');
+const Group = require('../models/group');
 const stageRouter = express.Router();
 // =============================================================================
 // Reset IDs of stages to sequential values
@@ -31,7 +32,7 @@ stageRouter.post('/reset-ids', async (req, res) => {
 // =============================================================================
 // // Create a new stage
 // =============================================================================
-stageRouter.post('', async (req, res) => {
+stageRouter.post('/', async (req, res) => {
     try {
         const stage_data = req.body;
         const stage = new Stage(stage_data);
@@ -47,7 +48,7 @@ stageRouter.post('', async (req, res) => {
 // =============================================================================
 // // Get all stages
 // =============================================================================
-stageRouter.get('', async (req, res) => {
+stageRouter.get('/', async (req, res) => {
     try {
         const stages = await Stage.find();
         res.json(stages);
@@ -105,7 +106,24 @@ stageRouter.delete('/:id', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+// =============================================================================
+// // get the groups of a specific stage
+// =============================================================================
+stageRouter.get('/:stageId/groups', async (req, res) => {
+    try {
+        const stageId = req.params.stageId;
+        const stage = await Stage.findById(stageId);
 
+        if (!stage) {
+            return res.status(404).json({ message: 'Stage not found' });
+        }
+
+        const groups = await Group.find({ stageIdOfGroup: stageId });
+        res.json(groups);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve groups', error });
+    }
+});
 // =============================================================================
 // // Helper function to get the next ID for a stage
 // =============================================================================
