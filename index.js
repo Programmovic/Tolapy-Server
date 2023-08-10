@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
+const teacherRouter = require('./routes/Teacher_Routes');
 const Stage = require('./models/stage');
-const Teacher = require('./models/teacher');
 const Student = require('./models/student');
 const Group = require('./models/group');
 const Degree = require('./models/degree');
@@ -24,49 +24,8 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-// =============================================================================
-// //REGISTER TEACHER API
-// =============================================================================
-app.post('/register', async (req, res) => {
-    const teacher = new Teacher(req.body);
-    const existing_teacher = await Teacher.findOne({ username: teacher.username });
-    if (existing_teacher) {
-        return res.status(409).json({ error: 'Teacher already exists' });
-    }
-    teacher.save()
-        .then((savedTeacher) => res.json(savedTeacher))
-        .catch((err) => {
-            res.status(500).json({ error: err });
-        });
-});
-// =============================================================================
-// //LOGIN TEACHER API
-// =============================================================================
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
 
-    try {
-        const teacher = await Teacher.findOne({ username });
-
-        if (!teacher) {
-            return res.status(401).json({ error: 'Teacher not found' });
-        }
-
-        const isMatch = await bcrypt.compare(password, teacher.password);
-
-        if (!isMatch) {
-            return res.status(401).json({ error: 'Incorrect password' });
-        }
-        const token = jwt.sign({ teacherId: teacher.id }, 'secret_key');
-
-        res.json({ teacher, token });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: err });
-    }
-});
+app.use("/teacher", teacherRouter);
 // =============================================================================
 // Reset IDs of stages to sequential values
 // =============================================================================
