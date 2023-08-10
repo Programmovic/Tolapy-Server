@@ -21,6 +21,7 @@ const groupSchema = new mongoose.Schema({
   groupsMessages: { type: [Message.schema] },
   groupRank: { type: Number, default: 0 },
   groupStudents: { type: [Student.schema] },
+  created_at: { type: Date, default: Date.now }
 }, { collection: 'Groups' });
 
 const Group = mongoose.model('Group', groupSchema);

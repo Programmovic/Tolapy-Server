@@ -14,6 +14,7 @@ const groupAttendanceSchema = new mongoose.Schema({
   totalAttendanceApplyStudentsNumber: { type: Number },
   totalAbsentApplyStudentsNumber: { type: Number },
   attendanceRank: { type: Number },
+  created_at: { type: Date, default: Date.now }
 }, { collection: 'Dates Of Attendances of Groups' });
 
 const GroupAttendance = mongoose.model('GroupAttendance', groupAttendanceSchema);

@@ -31,6 +31,7 @@ const studentSchema = new mongoose.Schema({
   studentAttendances: { type: [Attendance.schema] },
   studentSubjects: { type: [mongoose.Schema.Types.Mixed] },
   isSend: { type: Boolean, default: true },
+  created_at: { type: Date, default: Date.now }
 }, { collection: 'Students' });
 
 const Student = mongoose.model('Student', studentSchema);
