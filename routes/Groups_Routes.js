@@ -1,5 +1,6 @@
 const express = require('express');
 const Group = require('../models/group');
+const Stage = require('../models/stage');
 const groupRouter = express.Router();
 
 // =============================================================================
