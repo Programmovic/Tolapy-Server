@@ -1,5 +1,5 @@
 const express = require('express');
-const Stage = require('./models/stage');
+const Stage = require('../models/stage');
 const stageRouter = express.Router();
 // =============================================================================
 // Reset IDs of stages to sequential values
