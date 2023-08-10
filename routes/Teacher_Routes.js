@@ -1,5 +1,6 @@
 import express from 'express';
 const Teacher = require('./models/teacher');
+const Stage = require('./models/stage');
 const teacherRouter = express.Router();
 // =============================================================================
 // //REGISTER TEACHER API
@@ -42,6 +43,19 @@ teacherRouter.post('/login', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: err });
+    }
+});
+// =============================================================================
+// // Get all stages of a specific teacher
+// =============================================================================
+teacherRouter.get('/:teacherId/stages', async (req, res) => {
+    try {
+        const teacherId = req.params.teacherId; // Get the teacher ID from the URL parameter
+        const stages = await Stage.find({ teacherId }); // Find all stages with the specified teacher ID
+        res.json(stages);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
