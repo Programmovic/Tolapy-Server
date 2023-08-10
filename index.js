@@ -317,7 +317,7 @@ app.delete('/groups/:id', async (req, res) => {
 
         res.json({ message: 'Group deleted successfully' });
     } catch (error) {
-        res.status(500).json({ message: 'Failed to delete group', error });
+        res.status(500).json(error.message);
     }
 });
 // =============================================================================
