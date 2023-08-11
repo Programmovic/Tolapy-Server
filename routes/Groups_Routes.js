@@ -101,6 +101,18 @@ groupRouter.delete('/:id', async (req, res) => {
         res.status(500).json(error.message);
     }
 });
+// =============================================================================
+// // DELETE ALL GROUPS
+// =============================================================================
+groupRouter.delete('/', async (req, res) => {
+    try {
+        const group = await Group.deleteMany();
+
+        res.json({ message: 'Group deleted successfully' });
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+});
 
 
 module.exports = groupRouter;
