@@ -15,8 +15,6 @@ const stageSchema = new mongoose.Schema({
   groupRank: { type: Number, default: 0 },
   groupAttendanceRank: { type: Number, default: 0 },
   stageStudentsRank: { type: Number, default: 10 },
-  totalStudentsOfStage: { type: [Student.schema] },
-  totalGroupsOfStage: { type: [Group.schema] },
   created_at: { type: Date, default: Date.now }
 }, { collection: 'Stages' });
 
