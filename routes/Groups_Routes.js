@@ -8,20 +8,8 @@ const groupRouter = express.Router();
 // =============================================================================
 groupRouter.post('/', async (req, res) => {
     try {
-        const stageId = req.body.stageIdOfGroup;
-        const stage = await Stage.findById(stageId);
-
-        if (!stage) {
-            return res.status(404).json({ message: 'Stage not found' });
-        }
-
         const newGroup = new Group(req.body);
         await newGroup.save();
-        const groups = await Group.find();
-        stage.totalGroupsOfStageNumber = groups.length;
-        stage.totalGroupsOfStage = groups;
-        await stage.save();
-
         res.status(201).json(newGroup);
     } catch (error) {
         res.status(500).json({ message: 'Failed to create group', error });
@@ -67,10 +55,7 @@ groupRouter.put('/:id', async (req, res) => {
 
         Object.assign(group, req.body);
         await group.save();
-        const stage = await Stage.findById(group.stageIdOfGroup);
-        const groups = await Group.find();
-        stage.totalGroupsOfStage = groups
-        await stage.save();
+
         res.json(group);
     } catch (error) {
         res.status(500).json({ message: 'Failed to update group', error });
@@ -86,16 +71,6 @@ groupRouter.delete('/:id', async (req, res) => {
         if (!group) {
             return res.status(404).json({ message: 'Group not found' });
         }
-
-        const stage = await Stage.findById(group.stageIdOfGroup);
-
-        if (!stage) {
-            return res.status(404).json({ message: 'Stage not found' });
-        }
-        const groups = await Group.find();
-        stage.totalGroupsOfStageNumber = groups.length;
-        stage.totalGroupsOfStage = groups
-        await stage.save();
 
         res.json({ message: 'Group deleted successfully' });
     } catch (error) {
