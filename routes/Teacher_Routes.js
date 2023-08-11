@@ -58,5 +58,17 @@ teacherRouter.get('/:teacherId/stages', async (req, res) => {
         res.status(500).json(err);
     }
 });
+// =============================================================================
+// // DELETE ALL TEACHERS
+// =============================================================================
+teacherRouter.delete('/', async (req, res) => {
+    try {
+        const group = await Teacher.deleteMany();
+
+        res.json({ message: 'Teacher deleted successfully' });
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+});
 
 module.exports = teacherRouter;

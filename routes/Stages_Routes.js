@@ -125,6 +125,19 @@ stageRouter.get('/:stageId/groups', async (req, res) => {
         res.status(500).json({ message: 'Failed to retrieve groups', error });
     }
 });
+// =============================================================================
+// // DELETE ALL STAGES
+// =============================================================================
+stageRouter.delete('/', async (req, res) => {
+    try {
+        const group = await Stage.deleteMany();
+
+        res.json({ message: 'Stage deleted successfully' });
+    } catch (error) {
+        res.status(500).json(error.message);
+    }
+});
+
 
 
 module.exports = stageRouter;
