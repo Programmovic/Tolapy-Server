@@ -67,7 +67,10 @@ groupRouter.put('/:id', async (req, res) => {
 
         Object.assign(group, req.body);
         await group.save();
-
+        const stage = await Stage.findById(group.stageIdOfGroup);
+        const groups = await Group.find();
+        stage.totalGroupsOfStage = groups
+        await stage.save();
         res.json(group);
     } catch (error) {
         res.status(500).json({ message: 'Failed to update group', error });
