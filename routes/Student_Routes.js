@@ -56,7 +56,7 @@ studentRouter.put('/:id', async (req, res) => {
         Object.assign(student, req.body);
         await student.save();
 
-        res.json(group);
+        res.json(student);
     } catch (error) {
         res.status(500).json({ message: 'Failed to update STUDENT', error });
     }
