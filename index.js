@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const teacherRouter = require('./routes/Teacher_Routes');
 const stageRouter = require('./routes/Stages_Routes');
 const groupRouter = require('./routes/Groups_Routes');
+const studentRouter = require('./routes/Student_Routes');
 const Student = require('./models/student');
 const Degree = require('./models/degree');
 const Attendance = require('./models/attendance');
@@ -28,32 +29,9 @@ app.use(cors());
 app.use("/teacher", teacherRouter);
 app.use("/stages", stageRouter);
 app.use("/groups", groupRouter);
+app.use("/student", studentRouter);
 
-//CREATE STUDENT API
-app.get('/students', (req, res) => {
-    Student.find()
-        .then((students) => res.json(students))
-        .catch((err) => res.status(500).json({ error: err }));
-});
 
-app.post('/students', (req, res) => {
-    const student = new Student(req.body);
-    student.save()
-        .then((savedStudent) => res.json(savedStudent))
-        .catch((err) => res.status(500).json({ error: err }));
-});
-
-app.put('/students/:id', (req, res) => {
-    Student.findByIdAndUpdate(req.params.id, req.body)
-        .then(() => res.json({ message: 'Student updated successfully' }))
-        .catch((err) => res.status(500).json({ error: err }));
-});
-
-app.delete('/students/:id', (req, res) => {
-    Student.findByIdAndDelete(req.params.id)
-        .then(() => res.json({ message: 'Student deleted successfully' }))
-        .catch((err) => res.status(500).json({ error: err }));
-});
 
 //CREATE DEGREE API
 app.get('/degrees', (req, res) => {
