@@ -19,7 +19,7 @@ groupRouter.post('/', async (req, res) => {
         await newGroup.save();
         const groups = await Group.find();
         stage.totalGroupsOfStageNumber = groups.length;
-        stage.totalGroupsOfStage.push(newGroup);
+        stage.totalGroupsOfStage = groups;
         await stage.save();
 
         res.status(201).json(newGroup);
@@ -89,11 +89,9 @@ groupRouter.delete('/:id', async (req, res) => {
         if (!stage) {
             return res.status(404).json({ message: 'Stage not found' });
         }
-
-        stage.totalGroupsOfStageNumber--;
-        stage.totalGroupsOfStage = stage.totalGroupsOfStage.filter(
-            (groupId) => groupId !== group._id
-        );
+        const groups = await Group.find();
+        stage.totalGroupsOfStageNumber = groups.length;
+        stage.totalGroupsOfStage = groups
         await stage.save();
 
         res.json({ message: 'Group deleted successfully' });
