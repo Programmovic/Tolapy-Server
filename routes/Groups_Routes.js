@@ -1,6 +1,6 @@
 const express = require('express');
 const Group = require('../models/group');
-const Stage = require('../models/stage');
+const Student = require('../models/student');
 const groupRouter = express.Router();
 
 // =============================================================================
@@ -89,6 +89,21 @@ groupRouter.delete('/', async (req, res) => {
         res.status(500).json(error.message);
     }
 });
+// =============================================================================
+// // GET STUDENTS IN SPECIFIC GROUP
+// =============================================================================
+groupRouter.get('/:id/students', async (req, res) => {
+    try {
+        const students = await Student.find({groupIdOfStudent: req.params.id});
 
+        if (!students) {
+            return res.status(404).json({ message: 'No Students are Here.' });
+        }
+
+        res.json(students);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve group', error });
+    }
+});
 
 module.exports = groupRouter;
