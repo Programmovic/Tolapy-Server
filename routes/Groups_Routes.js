@@ -94,7 +94,7 @@ groupRouter.delete('/', async (req, res) => {
 // =============================================================================
 groupRouter.get('/:id/students', async (req, res) => {
     try {
-        const students = await Student.find({groupIdOfStudent: req.params.id});
+        const students = await Student.find({ groupIdOfStudent: req.params.id });
 
         if (!students) {
             return res.status(404).json({ message: 'No Students are Here.' });

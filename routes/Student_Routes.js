@@ -53,7 +53,7 @@ studentRouter.put('/:id', async (req, res) => {
             return res.status(404).json({ message: 'STUDENT not found' });
         }
 
-        Object.assign(group, req.body);
+        Object.assign(student, req.body);
         await student.save();
 
         res.json(group);
