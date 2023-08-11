@@ -17,8 +17,8 @@ groupRouter.post('/', async (req, res) => {
 
         const newGroup = new Group(req.body);
         await newGroup.save();
-
-        stage.totalGroupsOfStageNumber++;
+        const groups = await Group.find();
+        stage.totalGroupsOfStageNumber = groups.length;
         stage.totalGroupsOfStage.push(newGroup);
         await stage.save();
 
