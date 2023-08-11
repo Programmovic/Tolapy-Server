@@ -1,6 +1,7 @@
 const express = require('express');
 const Student = require('../models/student');
 const Stage = require('../models/stage');
+const Degree = require('../models/degree');
 const studentRouter = express.Router();
 
 // =============================================================================
@@ -87,6 +88,24 @@ studentRouter.delete('/', async (req, res) => {
         res.json({ message: 'STUDENT deleted successfully' });
     } catch (error) {
         res.status(500).json(error.message);
+    }
+});
+// =============================================================================
+// // get the degrees of a specific student
+// =============================================================================
+studentRouter.get('/:studentID/degrees', async (req, res) => {
+    try {
+        const studentID = req.params.studentID;
+        const student = await Student.findById(studentID);
+
+        if (!student) {
+            return res.status(404).json({ message: 'Student not found' });
+        }
+
+        const degrees = await Degree.find({ studentID: studentID });
+        res.json(degrees);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve degrees', error });
     }
 });
 

@@ -7,6 +7,7 @@ const teacherRouter = require('./routes/Teacher_Routes');
 const stageRouter = require('./routes/Stages_Routes');
 const groupRouter = require('./routes/Groups_Routes');
 const studentRouter = require('./routes/Student_Routes');
+const degreeRouter = require('./routes/Degree_Routes');
 const Student = require('./models/student');
 const Degree = require('./models/degree');
 const Attendance = require('./models/attendance');
@@ -30,6 +31,7 @@ app.use("/teacher", teacherRouter);
 app.use("/stages", stageRouter);
 app.use("/groups", groupRouter);
 app.use("/student", studentRouter);
+app.use("/degree", degreeRouter);
 
 
 

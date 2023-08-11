@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const degreeSchema = new mongoose.Schema({
+  studentID: { type: String },
   typeDegree: { type: String },
   degree: { type: String },
   dateDegree: { type: String },
