@@ -79,7 +79,7 @@ studentRouter.delete('/:id', async (req, res) => {
     }
 });
 // =============================================================================
-// // DELETE ALL GROUPS
+// // DELETE ALL STUDENTS
 // =============================================================================
 studentRouter.delete('/', async (req, res) => {
     try {
