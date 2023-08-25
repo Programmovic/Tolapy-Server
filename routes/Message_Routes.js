@@ -1,5 +1,5 @@
 const express = require('express');
-const messagemessageRouter = express.messageRouter();
+const messageRouter = express.messageRouter();
 const Message = require('../models/message');
 
 // Create a new message
