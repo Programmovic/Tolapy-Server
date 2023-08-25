@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const attendanceSchema = new mongoose.Schema({
+  studentID: { type: String },
   sessionType: { type: String },
   isAttend: { type: Boolean, default: false },
   lesson_date: { type: Date, default: Date.now },
