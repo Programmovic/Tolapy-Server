@@ -70,7 +70,7 @@ attendanceRouter.delete('/:id', async (req, res) => {
 attendanceRouter.get('/:studentID/:date', async (req, res) => {
     const { studentID, date } = req.params;
     try {
-        const attendance = await Attendance.findOne({
+        const attendance = await Attendance.find({
             studentID: studentID,
             lesson_date: new Date(date),
         });
@@ -88,9 +88,7 @@ attendanceRouter.get('/:studentID/:date', async (req, res) => {
 attendanceRouter.get('/:studentID', async (req, res) => {
     const { studentID } = req.params;
     try {
-        const attendance = await Attendance.findOne({
-            studentID: studentID
-        });
+        const attendance = await Attendance.find({ studentID: studentID });
 
         if (!attendance) {
             return res.status(404).json({ error: 'Attendance not found' });
