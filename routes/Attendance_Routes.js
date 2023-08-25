@@ -67,7 +67,7 @@ attendanceRouter.delete('/:id', async (req, res) => {
     }
 });
 // Get specific attendance records by date
-attendanceRouter.get('/attendance/:studentID/:date', async (req, res) => {
+attendanceRouter.get('/:studentID/:date', async (req, res) => {
     const { studentID, date } = req.params;
     try {
         const attendance = await Attendance.findOne({
