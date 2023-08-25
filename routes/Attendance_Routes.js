@@ -84,4 +84,21 @@ attendanceRouter.get('/:studentID/:date', async (req, res) => {
         res.status(500).json({ error: 'Failed to retrieve attendance' });
     }
 });
+// Get specific attendance records
+attendanceRouter.get('/:studentID', async (req, res) => {
+    const { studentID } = req.params;
+    try {
+        const attendance = await Attendance.findOne({
+            studentID: studentID
+        });
+
+        if (!attendance) {
+            return res.status(404).json({ error: 'Attendance not found' });
+        }
+
+        res.json(attendance);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve attendance' });
+    }
+});
 module.exports = attendanceRouter;
