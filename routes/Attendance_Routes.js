@@ -1,36 +1,79 @@
 const express = require('express');
 const attendanceRouter = express.Router();
 const Attendance = require('../models/attendance');
-const Group = require('../models/group');
 
-// Make attendance for a student in a specific group
-attendanceRouter.post('/groups/:groupId/attendance', async (req, res) => {
-    const { groupId } = req.params;
-
-    try {
-        const group = await Group.findById(groupId);
-        if (!group) {
-            return res.status(404).json({ error: 'Group not found' });
-        }
-
-        const attendance = new Attendance({
-            isAttend: true,
-            lesson_date: new Date(),
-        });
-
-        group.groupStudents.forEach((student) => {
-            if (!student.attendance) {
-                student.attendance = attendance._id;
-            }
-        });
-
-        await attendance.save();
-        await group.save();
-
-        res.status(201).json(attendance);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to mark attendance' });
-    }
+// Create a new attendance
+attendanceRouter.post('/', async (req, res) => {
+  try {
+    const attendance = new Attendance(req.body);
+    await attendance.save();
+    res.status(201).json(attendance);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create attendance' });
+  }
 });
 
+// Get all attendance records
+attendanceRouter.get('/', async (req, res) => {
+  try {
+    const attendance = await Attendance.find();
+    res.json(attendance);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve attendance' });
+  }
+});
+
+// Get a specific attendance record by ID
+attendanceRouter.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const attendance = await Attendance.findById(id);
+    if (!attendance) {
+      return res.status(404).json({ error: 'Attendance not found' });
+    }
+    res.json(attendance);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve attendance' });
+  }
+});
+
+// Update a specific attendance record
+attendanceRouter.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const attendance = await Attendance.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!attendance) {
+      return res.status(404).json({ error: 'Attendance not found' });
+    }
+    res.json(attendance);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update attendance' });
+  }
+});
+
+// Delete a specific attendance record
+attendanceRouter.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const attendance = await Attendance.findByIdAndDelete(id);
+    if (!attendance) {
+      return res.status(404).json({ error: 'Attendance not found' });
+    }
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete attendance' });
+  }
+});
+// Get specific attendance records by date
+attendanceRouter.get('/date', async (req, res) => {
+    const date = req.body.lesson_date;
+    try {
+      const attendance = await Attendance.find({ lesson_date: { $gte: new Date(date) } });
+      res.json(attendance);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to retrieve attendance' });
+    }
+  });
 module.exports = attendanceRouter;
