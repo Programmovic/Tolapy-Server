@@ -111,7 +111,7 @@ groupRouter.get('/:id/students', async (req, res) => {
 // =============================================================================
 groupRouter.get('/:groupID/messages', async (req, res) => {
     try {
-        const groupID = req.params.groupIdOfMessage;
+        const groupID = req.params.groupID;
         const group = await Group.findById(groupID);
 
         if (!group) {
