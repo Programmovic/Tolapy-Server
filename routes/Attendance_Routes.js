@@ -86,9 +86,10 @@ attendanceRouter.get('/:studentID/:date', async (req, res) => {
 });
 // Get specific attendance records
 attendanceRouter.get('/:studentID', async (req, res) => {
-    const { studentID } = req.params;
+    const student_ID = req.params.studentID;
+    
     try {
-        const attendance = await Attendance.find({ studentID: studentID });
+        const attendance = await Attendance.find({ studentID: student_ID });
 
         if (!attendance) {
             return res.status(404).json({ error: 'Attendance not found' });
