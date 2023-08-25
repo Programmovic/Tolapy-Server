@@ -1,5 +1,6 @@
 const express = require('express');
 const Group = require('../models/group');
+const Message = require('../models/message');
 const Student = require('../models/student');
 const groupRouter = express.Router();
 
@@ -103,6 +104,24 @@ groupRouter.get('/:id/students', async (req, res) => {
         res.json(students);
     } catch (error) {
         res.status(500).json({ message: 'Failed to retrieve group', error });
+    }
+});
+// =============================================================================
+// // get the groups of a specific stage
+// =============================================================================
+groupRouter.get('/:groupID/messages', async (req, res) => {
+    try {
+        const groupID = req.params.groupIdOfMessage;
+        const group = await Group.findById(groupID);
+
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+
+        const messages = await Message.find({ groupIdOfMessage: groupID });
+        res.json(messages);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve messages', error });
     }
 });
 
